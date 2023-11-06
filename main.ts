@@ -1,5 +1,5 @@
-controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    sprites.create(img`
+controller.player4.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Pressed, function () {
+    projectile = sprites.createProjectileFromSprite(img`
         ....................
         ....................
         ....................
@@ -20,9 +20,89 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         f242222222222222222f
         .f2444422222222222f.
         ..ffffffffffffffff..
-        `, SpriteKind.Projectile).setVelocity(50, 50)
+        `, mp.getPlayerSprite(mp.playerSelector(mp.PlayerNumber.Four)), 50, 50)
+})
+controller.player2.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Pressed, function () {
+    projectile = sprites.createProjectileFromSprite(img`
+        ....................
+        ....................
+        ....................
+        ....................
+        ...ffffffffffffff...
+        ...ffffffffffffff...
+        ...ff7777777777ff...
+        ...ff7ff.f.fff7ff...
+        ...ff7fff.ffff7ff...
+        ...ff7ffffffff7ff...
+        ...ff7777777777ff...
+        ...ffffffffffffff...
+        ..ffffffffffffffff..
+        .f2222222222222222f.
+        f222222222222222222f
+        f222222222222222222f
+        f222222222222222222f
+        f242222222222222222f
+        .f2444422222222222f.
+        ..ffffffffffffffff..
+        `, mp.getPlayerSprite(mp.playerSelector(mp.PlayerNumber.Two)), 50, 50)
+})
+controller.player1.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Pressed, function () {
+    projectile = sprites.createProjectileFromSprite(img`
+        ....................
+        ....................
+        ....................
+        ....................
+        ...ffffffffffffff...
+        ...ffffffffffffff...
+        ...ff7777777777ff...
+        ...ff7ff.f.fff7ff...
+        ...ff7fff.ffff7ff...
+        ...ff7ffffffff7ff...
+        ...ff7777777777ff...
+        ...ffffffffffffff...
+        ..ffffffffffffffff..
+        .f2222222222222222f.
+        f222222222222222222f
+        f222222222222222222f
+        f222222222222222222f
+        f242222222222222222f
+        .f2444422222222222f.
+        ..ffffffffffffffff..
+        `, mp.getPlayerSprite(mp.playerSelector(mp.PlayerNumber.One)), 50, 50)
+})
+controller.player3.onButtonEvent(ControllerButton.A, ControllerButtonEvent.Pressed, function () {
+    projectile = sprites.createProjectileFromSprite(img`
+        ....................
+        ....................
+        ....................
+        ....................
+        ...ffffffffffffff...
+        ...ffffffffffffff...
+        ...ff7777777777ff...
+        ...ff7ff.f.fff7ff...
+        ...ff7fff.ffff7ff...
+        ...ff7ffffffff7ff...
+        ...ff7777777777ff...
+        ...ffffffffffffff...
+        ..ffffffffffffffff..
+        .f2222222222222222f.
+        f222222222222222222f
+        f222222222222222222f
+        f222222222222222222f
+        f242222222222222222f
+        .f2444422222222222f.
+        ..ffffffffffffffff..
+        `, mp.getPlayerSprite(mp.playerSelector(mp.PlayerNumber.Three)), 50, 50)
+})
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
+    sprites.destroy(enemigo, effects.disintegrate, 500)
+    sprites.destroy(projectile, effects.disintegrate, 200)
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
+	
 })
 let enemigo: Sprite = null
+let projectile: Sprite = null
 scene.setBackgroundImage(img`
     6666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666
     6666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666
@@ -174,6 +254,7 @@ mp.setPlayerSprite(mp.playerSelector(mp.PlayerNumber.One), sprites.create(img`
     ....333..33.....333.......
     `, SpriteKind.Player))
 mp.moveWithButtons(mp.playerSelector(mp.PlayerNumber.One))
+mp.getPlayerSprite(mp.playerSelector(mp.PlayerNumber.One)).setBounceOnWall(true)
 mp.setPlayerSprite(mp.playerSelector(mp.PlayerNumber.Two), sprites.create(img`
     ..........999999..........
     .......99999999999........
@@ -203,6 +284,7 @@ mp.setPlayerSprite(mp.playerSelector(mp.PlayerNumber.Two), sprites.create(img`
     ....999..99.....999.......
     `, SpriteKind.Player))
 mp.moveWithButtons(mp.playerSelector(mp.PlayerNumber.Two))
+mp.getPlayerSprite(mp.playerSelector(mp.PlayerNumber.Two)).setBounceOnWall(true)
 mp.setPlayerSprite(mp.playerSelector(mp.PlayerNumber.Three), sprites.create(img`
     ....aaaaaaaa..............
     ...a14111111aa...4........
@@ -232,6 +314,7 @@ mp.setPlayerSprite(mp.playerSelector(mp.PlayerNumber.Three), sprites.create(img`
     .............ee...........
     `, SpriteKind.Player))
 mp.moveWithButtons(mp.playerSelector(mp.PlayerNumber.Three))
+mp.getPlayerSprite(mp.playerSelector(mp.PlayerNumber.Three)).setBounceOnWall(true)
 mp.setPlayerSprite(mp.playerSelector(mp.PlayerNumber.Four), sprites.create(img`
     ..........cccccc..........
     .......ccccccccccc........
@@ -261,33 +344,40 @@ mp.setPlayerSprite(mp.playerSelector(mp.PlayerNumber.Four), sprites.create(img`
     ....ccc..cc.....ccc.......
     `, SpriteKind.Player))
 mp.moveWithButtons(mp.playerSelector(mp.PlayerNumber.Four))
+mp.getPlayerSprite(mp.playerSelector(mp.PlayerNumber.Four)).setBounceOnWall(true)
+info.player1.setLife(3)
+info.player2.setLife(3)
+info.player3.setLife(3)
+info.player4.setLife(3)
 game.onUpdateInterval(500, function () {
     enemigo = sprites.create(img`
-        44444444444444444444444444
-        44444444444444444444444444
-        4fffffffffffffffffff444444
-        4f44444444444444444f444444
-        4f4ff44446644444444f444444
-        4f4ff74444664464444f444444
-        4f44444474764444444f444444
-        4f44444467666444744f444444
-        4f4447644777ff44444f444444
-        4f44477ff466ff64444f444444
-        4f44444ff4444464444f444444
-        4f444ffffff66667444f444444
-        4f444ff44ff46444444f444444
-        4f444ff44ff44444444f444444
-        4fffffffffffffffffff444444
-        444444fffffff4444444444444
-        444444f47446f4444444444444
-        444444f44764f4444444444444
-        444444f47474f4444444444444
-        444444f64446f4444444444444
-        4fffffffffffffffff44444444
-        4f647f4444444f746f44444444
-        4f474f4444444f647f44444444
-        4f766f4444444f464f44444444
-        4f467f4444444f476f44444444
-        4fffff4444444fffff44444444
+        ....................
+        ....................
+        .fffffffffffffffffff
+        .f44444444444444444f
+        .f4ff44446644444434f
+        .f4ff74444664464444f
+        .f44444474764444444f
+        .f44444467666444744f
+        .f4437644777ff44444f
+        .f44477ff466ff64434f
+        .f44344ff4444464444f
+        .f444ffffff66667444f
+        .f444ff44ff46444444f
+        .f434ff44ff44444434f
+        .fffffffffffffffffff
+        ......fffffff.......
+        ......f47446f.......
+        ......f34764f.......
+        ......f47474f.......
+        ......f64346f.......
+        .fffffffffffffffff..
+        .f637f.......f746f..
+        .f374f.......f637f..
+        .f766f.......f464f..
+        .f467f.......f476f..
+        .fffff.......fffff..
         `, SpriteKind.Enemy)
+    enemigo.setVelocity(-50, 0)
+    enemigo.setPosition(149, randint(4, 109))
 })
